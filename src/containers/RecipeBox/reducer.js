@@ -1,11 +1,10 @@
 import { ADD_RECIPE, EDIT_RECIPE, DELETE_RECIPE, SHOW_MODAL, HIDE_MODAL } from './constants'
-import update from 'immutability-helper';
 
 
 const initialState = {
     recipes: [],
-    currentModal: 'none',
-    editing: false
+    currentModal: undefined,
+    editing: undefined
 };
 
 export default function recipes(state = initialState, action) {
@@ -19,6 +18,23 @@ export default function recipes(state = initialState, action) {
                 }),
             };
 
+        case ADD_RECIPE:
+            return {
+                ...state,
+                recipes: [
+                    ...state.recipes,
+                    action.payload
+                ],
+            };
+
+        case EDIT_RECIPE:
+            return {
+                ...state,
+                recipes: state.recipes.map((recipe, index) =>
+                    index === action.payload.id ? action.payload.recipe : recipe
+                ),
+            };
+
         case SHOW_MODAL:
             return {
                 ...state,
@@ -30,24 +46,8 @@ export default function recipes(state = initialState, action) {
             return {
                 ...state,
                 currentModal: 'none',
-                editing: false
+                editing: undefined
             };
-
-        case ADD_RECIPE:
-            return {
-                ...state,
-                recipes: [
-                    ...state.recipes,
-                    action.payload
-                ],
-            };
-
-        case EDIT_RECIPE:
-            return update(state, {
-                recipes: {
-                    [action.payload.id]: { $set: action.payload.recipe }
-                }
-            });
 
         default:
             return state

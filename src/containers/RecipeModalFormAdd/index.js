@@ -5,48 +5,61 @@ import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 import RecipeModalBody from '../../components/RecipeModalBody'
-import { validateRecipeForm as validate } from "../../includes/validation";
+import { validateRecipeForm as validate } from "../../utils/validation";
+import {connect} from "react-redux";
+import {addRecipe, hideModal} from "../RecipeBox/actions";
 
 
 class RecipeModalFormAdd extends Component {
 
+    addRecipe = (values) => {
+        const { onHideModal, onAddRecipe, reset } = this.props;
+        onAddRecipe(values);
+        onHideModal();
+        reset();
+    };
+
     render() {
 
-        const { currentModal, onHideModal, handleSubmit, onAddRecipe, reset } = this.props;
-
-        const addRecipe = (values) => {
-            onAddRecipe(values);
-            onHideModal();
-            reset();
-        };
+        const { onHideModal, handleSubmit } = this.props;
 
         const buttonStyles = classnames({
             "btn-raised": true,
         });
 
         return (
-            <Modal show={currentModal === 'add'} onHide={onHideModal}>
-                <form onSubmit={handleSubmit(addRecipe)}>
-                    <Modal.Header closeButton>
-                        <Modal.Title>Add a Recipe</Modal.Title>
-                    </Modal.Header>
-                    <RecipeModalBody/>
-                    <Modal.Footer>
-                        <ButtonToolbar>
-                            <Button type="submit" bsStyle="primary" className={buttonStyles}>Add Recipe</Button>
-                            <Button bsStyle="default" onClick={onHideModal} className={buttonStyles}>Cancel</Button>
-                        </ButtonToolbar>
-                    </Modal.Footer>
-                </form>
-            </Modal>
+            <form onSubmit={handleSubmit(this.addRecipe)}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Add a Recipe</Modal.Title>
+                </Modal.Header>
+                <RecipeModalBody/>
+                <Modal.Footer>
+                    <ButtonToolbar>
+                        <Button type="submit" bsStyle="primary" className={buttonStyles}>Add Recipe</Button>
+                        <Button bsStyle="default" onClick={onHideModal} className={buttonStyles}>Cancel</Button>
+                    </ButtonToolbar>
+                </Modal.Footer>
+            </form>
         )
     }
 }
 
-export default reduxForm({
+RecipeModalFormAdd = reduxForm({
     form: 'addRecipeForm',
     shouldError: ({ props }) => {
         return props.invalid;
     },
     validate
 })(RecipeModalFormAdd);
+
+const mapStateToProps = state => ({
+    currentModal: state.recipeBox.currentModal
+});
+
+const mapDispatchToProps = {
+    onAddRecipe: addRecipe,
+    onHideModal: hideModal
+};
+
+RecipeModalFormAdd = connect(mapStateToProps, mapDispatchToProps)(RecipeModalFormAdd);
+export default RecipeModalFormAdd;

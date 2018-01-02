@@ -5,19 +5,20 @@ import { TextField } from 'redux-form-material-ui'
 
 
 export default class RecipeModalBody extends Component {
-    render() {
 
-        const styles = {
-            errorStyle: {
-                color: '#f44336',
-            },
-            underlineStyle: {
-                borderColor: '#009688',
-            },
-            floatingLabelFocusStyle: {
-                color: '#009688',
-            },
-        };
+    styles = {
+        errorStyle: {
+            color: '#f44336',
+        },
+        underlineStyle: {
+            borderColor: '#009688',
+        },
+        floatingLabelFocusStyle: {
+            color: '#009688',
+        },
+    };
+
+    render() {
 
         return (
             <Modal.Body>
@@ -28,8 +29,8 @@ export default class RecipeModalBody extends Component {
                         hintText="Enter recipe name here"
                         floatingLabelText="Recipe Name"
                         fullWidth={true}
-                        underlineFocusStyle={styles.underlineStyle}
-                        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                        underlineFocusStyle={this.styles.underlineStyle}
+                        floatingLabelFocusStyle={this.styles.floatingLabelFocusStyle}
                     />
                 </div>
                 <div className="form-group mx-3">
@@ -40,8 +41,8 @@ export default class RecipeModalBody extends Component {
                         floatingLabelText="Recipe Ingredients"
                         fullWidth={true}
                         multiLine={true}
-                        underlineFocusStyle={styles.underlineStyle}
-                        floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                        underlineFocusStyle={this.styles.underlineStyle}
+                        floatingLabelFocusStyle={this.styles.floatingLabelFocusStyle}
                     />
                 </div>
             </Modal.Body>
