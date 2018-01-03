@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
 import Modal from 'react-bootstrap/lib/Modal'
 import { connect } from "react-redux";
-import { hideModal } from "../RecipeBox/actions";
+import { hideModal } from "./actions";
 import RecipeModalFormAdd from "../RecipeModalFormAdd"
 import RecipeModalFormEdit from "../RecipeModalFormEdit"
 import ConfirmationModal from "../ConfirmationModal"
+import { selectCurrentModal } from './selectors'
+import { createStructuredSelector } from "reselect";
 
 
 class ModalWrapper extends Component {
@@ -26,15 +28,15 @@ class ModalWrapper extends Component {
     render() {
         const { currentModal, onHideModal } = this.props;
         return (
-            <Modal show={currentModal && currentModal !== 'none'} onHide={onHideModal}>
+            <Modal show={currentModal !== undefined} onHide={onHideModal}>
                 {this.getContent()}
             </Modal>
         )
     }
 }
 
-const mapStateToProps = state => ({
-    currentModal: state.recipeBox.currentModal
+const mapStateToProps = createStructuredSelector({
+    currentModal: selectCurrentModal
 });
 
 const mapDispatchToProps = {

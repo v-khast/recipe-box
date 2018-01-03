@@ -3,7 +3,7 @@ import classnames from 'classnames'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import { getRecipeBox } from './selectors'
-import { deleteRecipe, addRecipe, editRecipe, showModal, hideModal } from './actions'
+import { showModal } from '../ModalWrapper/actions'
 
 import Accordion from 'react-bootstrap/lib/Accordion'
 import Panel from 'react-bootstrap/lib/Panel'
@@ -13,7 +13,7 @@ import Alert from 'react-bootstrap/lib/Alert'
 
 import ModalWrapper from "../ModalWrapper"
 
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 
@@ -88,11 +88,7 @@ const mapStateToProps = createStructuredSelector({
 });
 
 const mapDispatchToProps = {
-    onAddRecipe: addRecipe,
-    onEditRecipe: editRecipe,
-    onDeleteRecipe: deleteRecipe,
     onShowModal: showModal,
-    onHideModal: hideModal
 };
 
 const EnhancedComponent = connect(mapStateToProps, mapDispatchToProps)(RecipeBox);

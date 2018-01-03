@@ -1,76 +1,58 @@
 import * as types from './constants'
-import { loadState, saveState } from "../../utils/localStorage";
+import { saveState } from "../../utils/localStorage";
 
 
-export function deleteRecipe(id) {
-    const persistedState = loadState().recipeBox;
-    saveState({
-        recipeBox: {
-            recipes: persistedState.recipes.filter((recipe, index) => {
-                return index !== id;
-            }),
-            currentModal: undefined,
-            editing: undefined
-        }
-    });
-    return {
-        type: types.DELETE_RECIPE,
-        payload: id
-    };
-}
-
-export function addRecipe(values) {
+export const addRecipe = values => (dispatch, getState) => {
+    const persistedState = getState().recipeBox;
     const newRecipe = {
         name: values.name,
         ingredients: values.ingredients
     };
-    const persistedState = loadState().recipeBox;
+    const updatedRecipes = [
+        ...persistedState.recipes,
+        newRecipe
+    ];
     saveState({
         recipeBox: {
-            recipes: [
-                ...persistedState.recipes,
-                newRecipe
-            ],
-            currentModal: undefined,
-            editing: undefined
+            recipes: updatedRecipes
         }
     });
-    return {
+    dispatch({
         type: types.ADD_RECIPE,
-        payload: newRecipe
-    };
-}
+        payload: updatedRecipes
+    });
+};
 
-export function editRecipe(values, id) {
-    const updatedRecipe = {
+export const editRecipe = (values, id) => (dispatch, getState) => {
+    const persistedState = getState().recipeBox;
+    const editedRecipe = {
         name: values.name,
         ingredients: values.ingredients
     };
-    const persistedState = loadState().recipeBox;
+    const updatedRecipes = persistedState.recipes.map((recipe, index) =>
+        index === id ? editedRecipe : recipe
+    );
     saveState({
         recipeBox: {
-            recipes: persistedState.recipes.map((recipe, index) =>
-                index === id ? updatedRecipe : recipe
-            ),
-            currentModal: undefined,
-            editing: undefined
+            recipes: updatedRecipes
         }
     });
-    return {
+    dispatch({
         type: types.EDIT_RECIPE,
-        payload: {recipe: updatedRecipe, id: id}
-    };
-}
+        payload: updatedRecipes
+    });
+};
 
-export function showModal(name, editing = false) {
-    return {
-        type: types.SHOW_MODAL,
-        payload: {name: name, editing: editing}
-    };
-}
-
-export function hideModal() {
-    return {
-        type: types.HIDE_MODAL,
-    };
-}
+export const deleteRecipe = id => (dispatch, getState) => {
+    const persistedState = getState().recipeBox;
+    const updatedRecipes = persistedState.recipes.filter((recipe, index) => index !== id);
+    saveState({
+        recipeBox: {
+            recipes: updatedRecipes
+        }
+    });
+    dispatch({
+        type: types.DELETE_RECIPE,
+        payload: updatedRecipes
+    });
+};

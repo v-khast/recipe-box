@@ -6,8 +6,11 @@ import Button from 'react-bootstrap/lib/Button'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 import RecipeModalBody from '../../components/RecipeModalBody'
 import { validateRecipeForm as validate } from "../../utils/validation";
-import {connect} from "react-redux";
-import {addRecipe, hideModal} from "../RecipeBox/actions";
+import { connect } from "react-redux";
+import { addRecipe } from "../RecipeBox/actions";
+import { hideModal } from "../ModalWrapper/actions";
+import { selectCurrentModal } from "../ModalWrapper/selectors";
+import { createStructuredSelector } from "reselect";
 
 
 class RecipeModalFormAdd extends Component {
@@ -52,8 +55,8 @@ RecipeModalFormAdd = reduxForm({
     validate
 })(RecipeModalFormAdd);
 
-const mapStateToProps = state => ({
-    currentModal: state.recipeBox.currentModal
+const mapStateToProps = createStructuredSelector({
+    currentModal: selectCurrentModal
 });
 
 const mapDispatchToProps = {

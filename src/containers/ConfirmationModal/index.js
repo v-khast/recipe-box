@@ -3,8 +3,11 @@ import Modal from 'react-bootstrap/lib/Modal'
 import Button from 'react-bootstrap/lib/Button'
 import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar'
 import classnames from "classnames";
-import {connect} from "react-redux";
-import {deleteRecipe, hideModal} from "../RecipeBox/actions";
+import { connect } from "react-redux";
+import { deleteRecipe } from "../RecipeBox/actions";
+import { hideModal } from "../ModalWrapper/actions";
+import { selectCurrentModal, selectEditingId } from "../ModalWrapper/selectors";
+import { createStructuredSelector } from "reselect";
 
 
 class ConfirmationModal extends Component {
@@ -51,9 +54,9 @@ class ConfirmationModal extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    editing: state.recipeBox.editing,
-    currentModal: state.recipeBox.currentModal
+const mapStateToProps = createStructuredSelector({
+    currentModal: selectCurrentModal,
+    editing: selectEditingId
 });
 
 const mapDispatchToProps = {
